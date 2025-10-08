@@ -2,10 +2,19 @@
 <html>
 <head><title>Register Patient</title></head>
 <body>
-    <form action="register" method="post">
-        <label>Patient Name:</label>
-        <input type="text" name="name" />
-        <input type="submit" value="Register" />
-    </form>
+  <form action="register" method="post">
+    <label>Nom:</label><input type="text" name="nom" /><br/>
+    <label>Prénom:</label><input type="text" name="prenom" /><br/>
+    <label>Date de naissance:</label><input type="date" name="date_naissance" /><br/>
+    <label>Numéro de sécurité sociale:</label><input type="text" name="nss" /><br/>
+    <label>Téléphone:</label><input type="text" name="telephone" /><br/>
+    <label>Adresse:</label><input type="text" name="adresse" /><br/>
+    <label>Mutuelle:</label><input type="text" name="mutuelle" /><br/>
+    <label>Antécédents:</label><textarea name="antecedents"></textarea><br/>
+    <label>Allergies:</label><textarea name="allergies"></textarea><br/>
+    <label>Traitements en cours:</label><textarea name="traitements"></textarea><br/>
+    <input type="submit" value="Enregistrer le patient" />
+     </form>
+
 </body>
 </html>
