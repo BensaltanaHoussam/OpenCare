@@ -1,8 +1,7 @@
+// Java
 package com.opencare.entities;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.UuidGenerator;
-
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -11,9 +10,8 @@ import java.util.UUID;
 public class Patient {
 
     @Id
-    @GeneratedValue
-    @UuidGenerator
-    @Column(name = "id", nullable = false, updatable = false, columnDefinition = "CHAR(36)")
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id", nullable = false, updatable = false)
     private UUID id;
 
     @Column(name = "nom", nullable = false, length = 100)
@@ -75,9 +73,6 @@ public class Patient {
     public String getAllergies() { return allergies; }
     public void setAllergies(String allergies) { this.allergies = allergies; }
 
-    // Java
-    public String getTraitementsEnCours() {
-        return traitementsEnCours;
-    }
+    public String getTraitementsEnCours() { return traitementsEnCours; }
     public void setTraitementsEnCours(String traitementsEnCours) { this.traitementsEnCours = traitementsEnCours; }
 }

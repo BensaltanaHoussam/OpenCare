@@ -1,3 +1,4 @@
+// Java
 package com.opencare.servlets;
 
 import com.opencare.dao.PatientDAO;
@@ -10,9 +11,12 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class PatientServlet extends HttpServlet {
 
+    private static final Logger LOG = Logger.getLogger(PatientServlet.class.getName());
     private final PatientDAO patientDAO = new PatientDAO();
 
     @Override
@@ -35,8 +39,9 @@ public class PatientServlet extends HttpServlet {
             patient.setTraitementsEnCours(request.getParameter("traitements_en_cours"));
 
             patientDAO.save(patient);
-            response.getWriter().println("<h2>Patient enregistré avec succès !</h2>");
+            response.getWriter().println("<h2>Patient enregistré avec succès &#33;</h2>");
         } catch (Exception e) {
+            LOG.log(Level.SEVERE, "Erreur lors de l'enregistrement du patient", e);
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().println("<h2>Erreur lors de l'enregistrement du patient.</h2>");
         }
