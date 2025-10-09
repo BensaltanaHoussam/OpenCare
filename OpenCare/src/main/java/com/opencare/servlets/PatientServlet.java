@@ -1,55 +1,49 @@
+// Java
 package com.opencare.servlets;
 
-import jakarta.servlet.*;
-import jakarta.servlet.http.*;
-import com.opencare.utils.DBUtil;
+import com.opencare.dao.PatientDAO;
+import com.opencare.entities.Patient;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class PatientServlet extends HttpServlet {
+
+    private static final Logger LOG = Logger.getLogger(PatientServlet.class.getName());
+    private final PatientDAO patientDAO = new PatientDAO();
+
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String nom = request.getParameter("nom");
-        String prenom = request.getParameter("prenom");
-        String dateNaissance = request.getParameter("date_naissance");
-        String nss = request.getParameter("numero_securite_sociale");
-        String telephone = request.getParameter("telephone");
-        String adresse = request.getParameter("adresse");
-        String mutuelle = request.getParameter("mutuelle");
-        String antecedents = request.getParameter("antecedents");
-        String allergies = request.getParameter("allergies");
-        String traitements = request.getParameter("traitements_en_cours");
+        request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=UTF-8");
 
-        try (Connection conn = DBUtil.getConnection()) {
-            String sql = "INSERT INTO patients(nom, prenom, date_naissance, numero_securite_sociale, telephone, adresse, mutuelle, antecedents, allergies, traitements_en_cours) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setString(1, nom);
-            stmt.setString(2, prenom);
-            stmt.setString(3, dateNaissance);
-            stmt.setString(4, nss);
-            stmt.setString(5, telephone);
-            stmt.setString(6, adresse);
-            stmt.setString(7, mutuelle);
-            stmt.setString(8, antecedents);
-            stmt.setString(9, allergies);
-            stmt.setString(10, traitements);
+        try {
+            Patient patient = new Patient();
+            patient.setNom(request.getParameter("nom"));
+            patient.setPrenom(request.getParameter("prenom"));
+            patient.setDateNaissance(LocalDate.parse(request.getParameter("date_naissance")));
+            patient.setNumeroSecuriteSociale(request.getParameter("numero_securite_sociale"));
+            patient.setTelephone(request.getParameter("telephone"));
+            patient.setAdresse(request.getParameter("adresse"));
+            patient.setMutuelle(request.getParameter("mutuelle"));
+            patient.setAntecedents(request.getParameter("antecedents"));
+            patient.setAllergies(request.getParameter("allergies"));
+            patient.setTraitementsEnCours(request.getParameter("traitements_en_cours"));
 
-            int rowsInserted = stmt.executeUpdate();
-
-            if (rowsInserted > 0) {
-                response.getWriter().println("<h2>Patient enregistré avec succès !</h2>");
-            } else {
-                response.getWriter().println("<h2>Échec de l'enregistrement du patient.</h2>");
-            }
-        }catch (SQLException e) {
-            e.printStackTrace();
+            patientDAO.save(patient);
+            response.getWriter().println("<h2>Patient enregistré avec succès &#33;</h2>");
+        } catch (Exception e) {
+            LOG.log(Level.SEVERE, "Erreur lors de l'enregistrement du patient", e);
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().println("<h2>Erreur lors de l'enregistrement du patient.</h2>");
         }
-
     }
 }
