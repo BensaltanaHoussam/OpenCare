@@ -19,6 +19,12 @@
 
 
     <dependencies>
+        <!-- XML -->
+        <dependency>
+            <groupId>at.favre.lib</groupId>
+            <artifactId>bcrypt</artifactId>
+            <version>0.10.2</version>
+        </dependency>
         <!-- Servlet API: fourni par Tomcat -->
         <dependency>
             <groupId>jakarta.servlet</groupId>

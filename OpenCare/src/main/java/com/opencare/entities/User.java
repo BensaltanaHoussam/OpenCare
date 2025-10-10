@@ -18,15 +18,15 @@ public class User {
     @Column(name = "email", length = 150)
     private String email;
 
-    @Column(name = "password_hash", length = 255)
+    @Column(name = "password_hash", nullable = false, length = 255)
     private String passwordHash;
 
     @Column(name = "full_name", length = 150)
     private String fullName;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "role_id")
-    private Role role;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false, length = 30)
+    private RoleType role;
 
     @Column(name = "actif")
     private Boolean actif = true;
@@ -43,8 +43,8 @@ public class User {
     public void setPasswordHash(String passwordHash) { this.passwordHash = passwordHash; }
     public String getFullName() { return fullName; }
     public void setFullName(String fullName) { this.fullName = fullName; }
-    public Role getRole() { return role; }
-    public void setRole(Role role) { this.role = role; }
+    public RoleType getRole() { return role; }
+    public void setRole(RoleType role) { this.role = role; }
     public Boolean getActif() { return actif; }
     public void setActif(Boolean actif) { this.actif = actif; }
     public java.time.Instant getCreatedAt() { return createdAt; }
