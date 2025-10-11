@@ -1,8 +1,10 @@
+// Java
 package com.opencare.entities;
 
 import jakarta.persistence.*;
 import java.time.Instant;
 import java.util.UUID;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "consultations")
@@ -44,13 +46,13 @@ public class Consultation {
     private String observations;
 
     @Column(name = "cout_consultation", precision = 10, scale = 2)
-    private Double coutConsultation = 150.0;
+    private BigDecimal coutConsultation = BigDecimal.valueOf(150.00);
 
     @Column(name = "cout_expertise", precision = 10, scale = 2)
-    private Double coutExpertise = 0.0;
+    private BigDecimal coutExpertise = BigDecimal.ZERO;
 
     @Column(name = "total_cost", precision = 12, scale = 2)
-    private Double totalCost = 0.0;
+    private BigDecimal totalCost = BigDecimal.ZERO;
 
     @Column(name = "created_at", insertable = false, updatable = false)
     private Instant createdAt;
@@ -75,11 +77,11 @@ public class Consultation {
     public void setMotif(String motif) { this.motif = motif; }
     public String getObservations() { return observations; }
     public void setObservations(String observations) { this.observations = observations; }
-    public Double getCoutConsultation() { return coutConsultation; }
-    public void setCoutConsultation(Double coutConsultation) { this.coutConsultation = coutConsultation; }
-    public Double getCoutExpertise() { return coutExpertise; }
-    public void setCoutExpertise(Double coutExpertise) { this.coutExpertise = coutExpertise; }
-    public Double getTotalCost() { return totalCost; }
-    public void setTotalCost(Double totalCost) { this.totalCost = totalCost; }
+    public BigDecimal getCoutConsultation() { return coutConsultation; }
+    public void setCoutConsultation(BigDecimal coutConsultation) { this.coutConsultation = coutConsultation; }
+    public BigDecimal getCoutExpertise() { return coutExpertise; }
+    public void setCoutExpertise(BigDecimal coutExpertise) { this.coutExpertise = coutExpertise; }
+    public BigDecimal getTotalCost() { return totalCost; }
+    public void setTotalCost(BigDecimal totalCost) { this.totalCost = totalCost; }
     public Instant getCreatedAt() { return createdAt; }
 }

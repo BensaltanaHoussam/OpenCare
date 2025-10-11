@@ -1,8 +1,10 @@
+// Java
 package com.opencare.entities;
 
 import jakarta.persistence.*;
 import java.time.Instant;
 import java.util.UUID;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "specialistes")
@@ -22,7 +24,7 @@ public class Specialiste {
     private Specialite specialite;
 
     @Column(name = "tarif", precision = 10, scale = 2)
-    private Double tarif = 0.0;
+    private BigDecimal tarif = BigDecimal.ZERO;
 
     @Column(name = "created_at", insertable = false, updatable = false)
     private Instant createdAt;
@@ -32,7 +34,7 @@ public class Specialiste {
     public void setUser(User user) { this.user = user; }
     public Specialite getSpecialite() { return specialite; }
     public void setSpecialite(Specialite specialite) { this.specialite = specialite; }
-    public Double getTarif() { return tarif; }
-    public void setTarif(Double tarif) { this.tarif = tarif; }
+    public BigDecimal getTarif() { return tarif; }
+    public void setTarif(BigDecimal tarif) { this.tarif = tarif; }
     public Instant getCreatedAt() { return createdAt; }
 }
