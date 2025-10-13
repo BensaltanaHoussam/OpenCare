@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <html>
 <head>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/tailwind.generated.css"/>
   <title>Connexion</title>
   <meta charset="UTF-8"/>
   <style>

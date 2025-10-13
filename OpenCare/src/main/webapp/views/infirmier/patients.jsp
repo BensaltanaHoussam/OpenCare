@@ -3,6 +3,7 @@
 <html>
 <head>
   <meta charset="UTF-8"/>
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/tailwind.generated.css"/>
   <title>Patients du jour</title>
   <style>
     body{font-family:Arial;margin:24px}
