@@ -1,3 +1,4 @@
+// java
 package com.opencare.entities;
 
 import jakarta.persistence.*;
@@ -17,7 +18,8 @@ public class FileAttente {
     @JoinColumn(name = "patient_id")
     private Patient patient;
 
-    @Column(name = "arrive_at", insertable = false, updatable = false)
+    // Autoriser l'insertion; empêcher la mise à jour après coup.
+    @Column(name = "arrive_at", nullable = false, updatable = false)
     private Instant arriveAt;
 
     @Column(name = "position")
@@ -35,6 +37,13 @@ public class FileAttente {
     private String notes;
 
     public enum Statut { EN_ATTENTE, APPELE, EN_CONSULTATION, PARTI }
+
+    @PrePersist
+    private void prePersist() {
+        if (arriveAt == null) {
+            arriveAt = Instant.now();
+        }
+    }
 
     public UUID getId() { return id; }
     public Patient getPatient() { return patient; }
