@@ -19,28 +19,48 @@
   <div class="ok">Patient ajouté à la file d’attente.</div>
 </c:if>
 
+<form method="get" action="${pageContext.request.contextPath}/infirmier/patients" style="margin-bottom:12px;">
+  <label for="date">Date</label>
+  <input type="date" id="date" name="date" value="${empty date ? '' : date}"/>
+  <button type="submit">Filtrer</button>
+</form>
+
 <table>
   <thead>
-    <tr>
-      <th>Arrivée</th>
-      <th>Nom</th>
-      <th>Prénom</th>
-      <th>N° sécu</th>
-      <th>Statut</th>
-    </tr>
+  <tr>
+    <th>Arrivée</th>
+    <th>Nom</th>
+    <th>Prénom</th>
+    <th>N° sécu</th>
+    <th>TA</th>
+    <th>FC</th>
+    <th>T°</th>
+    <th>SpO2</th>
+    <th>Poids</th>
+    <th>Taille</th>
+    <th>IMC</th>
+    <th>Statut</th>
+  </tr>
   </thead>
   <tbody>
   <c:forEach var="fa" items="${fileAttente}">
     <tr>
-      <td>${fa.arriveAt}</td>
-      <td>${fa.patient.nom}</td>
-      <td>${fa.patient.prenom}</td>
-      <td>${fa.patient.numeroSecuriteSociale}</td>
-      <td>${fa.statut}</td>
+      <td><c:out value="${fa.arriveAt}"/></td>
+      <td><c:out value="${fa.patient.nom}"/></td>
+      <td><c:out value="${fa.patient.prenom}"/></td>
+      <td><c:out value="${fa.patient.numeroSecuriteSociale}"/></td>
+      <td><c:out value="${fa.signesVitaux.taSys}"/>/<c:out value="${fa.signesVitaux.taDia}"/></td>
+      <td><c:out value="${fa.signesVitaux.frequenceCardiaque}"/></td>
+      <td><c:out value="${fa.signesVitaux.temperatureC}"/></td>
+      <td><c:out value="${fa.signesVitaux.spo2}"/></td>
+      <td><c:out value="${fa.signesVitaux.poidsKg}"/></td>
+      <td><c:out value="${fa.signesVitaux.tailleCm}"/></td>
+      <td><c:out value="${fa.signesVitaux.imc}"/></td>
+      <td><c:out value="${fa.statut}"/></td>
     </tr>
   </c:forEach>
   <c:if test="${empty fileAttente}">
-    <tr><td colspan="5" style="color:#666">Aucun patient en attente pour le moment.</td></tr>
+    <tr><td colspan="12" style="color:#666">Aucun patient pour cette date.</td></tr>
   </c:if>
   </tbody>
 </table>

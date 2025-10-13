@@ -18,7 +18,6 @@ public class FileAttente {
     @JoinColumn(name = "patient_id")
     private Patient patient;
 
-    // Autoriser l'insertion; empêcher la mise à jour après coup.
     @Column(name = "arrive_at", nullable = false, updatable = false)
     private Instant arriveAt;
 
@@ -35,6 +34,9 @@ public class FileAttente {
 
     @Column(name = "notes", columnDefinition = "TEXT")
     private String notes;
+
+    @Embedded
+    private SignesVitaux signesVitaux;
 
     public enum Statut { EN_ATTENTE, APPELE, EN_CONSULTATION, PARTI }
 
@@ -57,4 +59,6 @@ public class FileAttente {
     public void setAssignedDoctor(User assignedDoctor) { this.assignedDoctor = assignedDoctor; }
     public String getNotes() { return notes; }
     public void setNotes(String notes) { this.notes = notes; }
+    public SignesVitaux getSignesVitaux() { return signesVitaux; }
+    public void setSignesVitaux(SignesVitaux signesVitaux) { this.signesVitaux = signesVitaux; }
 }

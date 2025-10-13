@@ -57,6 +57,38 @@
     </div>
   </fieldset>
 
+  <fieldset style="margin-top:12px;">
+    <legend>Signes vitaux</legend>
+    <div class="row">
+      <label for="taSys">TA systolique (mmHg)</label>
+      <input type="text" id="taSys" name="taSys" value="${param.taSys}"/>
+    </div>
+    <div class="row">
+      <label for="taDia">TA diastolique (mmHg)</label>
+      <input type="text" id="taDia" name="taDia" value="${param.taDia}"/>
+    </div>
+    <div class="row">
+      <label for="fc">Fréquence cardiaque (bpm)</label>
+      <input type="text" id="fc" name="fc" value="${param.fc}"/>
+    </div>
+    <div class="row">
+      <label for="temp">Température (°C)</label>
+      <input type="text" id="temp" name="temp" value="${param.temp}"/>
+    </div>
+    <div class="row">
+      <label for="spo2">SpO2 (%)</label>
+      <input type="text" id="spo2" name="spo2" value="${param.spo2}"/>
+    </div>
+    <div class="row">
+      <label for="poids">Poids (kg)</label>
+      <input type="text" id="poids" name="poids" value="${param.poids}"/>
+    </div>
+    <div class="row">
+      <label for="taille">Taille (cm)</label>
+      <input type="text" id="taille" name="taille" value="${param.taille}"/>
+    </div>
+  </fieldset>
+
   <div class="actions">
     <button type="submit">Enregistrer et ajouter à la file</button>
     <a href="${pageContext.request.contextPath}/infirmier/patients" style="margin-left:12px;">Voir la file du jour</a>

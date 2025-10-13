@@ -1,3 +1,4 @@
+// java
 package com.opencare.servlets.infirmier;
 
 import com.opencare.entities.FileAttente;
@@ -9,6 +10,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 
 import java.io.IOException;
+import java.time.*;
+import java.util.Comparator;
 import java.util.List;
 
 @WebServlet(urlPatterns = "/infirmier/patients")
@@ -18,12 +21,20 @@ public class InfirmierPatientsServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        EntityManager em = JPAUtil.getEntityManager();
-        try {
-            List<FileAttente> list = queueRepo.findTodayWaitingWithPatient(em);
+        String dateStr = req.getParameter("date");
+        LocalDate target = (dateStr == null || dateStr.isBlank()) ? LocalDate.now() : LocalDate.parse(dateStr);
+
+        try (EntityManager em = JPAUtil.getEntityManager()) {
+            List<FileAttente> raw = queueRepo.findTodayWithPatient(em); // charge le jour courant
+            ZoneId zone = ZoneId.systemDefault();
+            List<FileAttente> list = raw.stream()
+                    .filter(fa -> fa.getArriveAt() != null &&
+                            fa.getArriveAt().atZone(zone).toLocalDate().isEqual(target))
+                    .sorted(Comparator.comparing(FileAttente::getArriveAt))
+                    .toList();
+
             req.setAttribute("fileAttente", list);
-        } finally {
-            em.close();
+            req.setAttribute("date", target.toString());
         }
         req.getRequestDispatcher("/views/infirmier/patients.jsp").forward(req, resp);
     }

@@ -1,7 +1,9 @@
+// java
 package com.opencare.repositories;
 
 import com.opencare.entities.FileAttente;
 import com.opencare.entities.Patient;
+import com.opencare.entities.SignesVitaux;
 import jakarta.persistence.EntityManager;
 
 import java.time.Instant;
@@ -36,6 +38,14 @@ public class FileAttenteRepository {
         em.persist(fa);
     }
 
+    public void enqueue(EntityManager em, Patient patient, SignesVitaux signes) {
+        FileAttente fa = new FileAttente();
+        fa.setPatient(patient);
+        fa.setStatut(FileAttente.Statut.EN_ATTENTE);
+        fa.setSignesVitaux(signes);
+        em.persist(fa);
+    }
+
     public List<FileAttente> findTodayWaitingWithPatient(EntityManager em) {
         Instant start = LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant();
         Instant end = LocalDate.now().plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant();
@@ -47,6 +57,21 @@ public class FileAttenteRepository {
                                 "order by fa.arriveAt asc",
                         FileAttente.class)
                 .setParameter("statut", FileAttente.Statut.EN_ATTENTE)
+                .setParameter("start", start)
+                .setParameter("end", end)
+                .getResultList();
+    }
+
+    public List<FileAttente> findTodayWithPatient(EntityManager em) {
+        Instant start = LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant();
+        Instant end = LocalDate.now().plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant();
+
+        return em.createQuery(
+                        "select fa from FileAttente fa " +
+                                "join fetch fa.patient p " +
+                                "where fa.arriveAt >= :start and fa.arriveAt < :end " +
+                                "order by fa.arriveAt asc",
+                        FileAttente.class)
                 .setParameter("start", start)
                 .setParameter("end", end)
                 .getResultList();
