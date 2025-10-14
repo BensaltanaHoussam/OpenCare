@@ -23,14 +23,25 @@
             <p class="text-sm text-gray-500">File d’attente et suivi</p>
           </div>
         </div>
-        <a href="${pageContext.request.contextPath}/infirmier/accueil"
-           class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M12 4v16m8-8H4"/>
-          </svg>
-          Nouvel enregistrement
-        </a>
+        <div>
+                <a href="${pageContext.request.contextPath}/infirmier/accueil"
+                   class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M12 4v16m8-8H4"/>
+                  </svg>
+                  Nouvel enregistrement
+                </a>
+                <a href="${pageContext.request.contextPath}/logout"
+                   class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-red-600 bg-white border border-red-200 rounded-lg hover:bg-red-50 transition-colors ml-2">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M17 16l4-4m0 0l-4-4m4 4H7"/>
+                  </svg>
+                  Déconnexion
+                </a>
+        </div>
+
       </div>
     </div>
   </header>
@@ -62,23 +73,26 @@
           Filtrer par date
         </h2>
       </div>
-      <form method="get" action="${pageContext.request.contextPath}/infirmier/patients" class="p-6">
-        <div class="flex flex-col sm:flex-row items-start sm:items-end gap-4">
-          <div class="w-full sm:w-auto">
-            <label for="date" class="block text-sm font-medium text-gray-700 mb-2">Date</label>
-            <input type="date" id="date" name="date" value="${empty date ? '' : date}"
-                   class="w-full sm:w-64 px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-red-600 transition-colors text-gray-900"/>
-          </div>
-          <button type="submit"
-                  class="inline-flex items-center gap-2 px-5 py-2.5 bg-red-600 text-white font-medium rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M8 7V3m8 4V3M3 11h18M5 21h14a2 2 0 002-2v-6H3v6a2 2 0 002 2z"/>
-            </svg>
-            Filtrer
-          </button>
+
+    <form method="get" action="${pageContext.request.contextPath}/infirmier/patients" class="p-6">
+      <div class="flex flex-col sm:flex-row items-start sm:items-end gap-4">
+        <div class="w-full sm:w-auto">
+          <label for="date" class="block text-sm font-medium text-gray-700 mb-2">Date</label>
+          <input type="date" id="date" name="date" value="${empty date ? '' : date}"
+                 class="w-full sm:w-64 px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-red-600 transition-colors text-gray-900"/>
         </div>
-      </form>
+        <div class="w-full sm:w-auto">
+          <label for="nom" class="block text-sm font-medium text-gray-700 mb-2">Nom du patient</label>
+          <input type="search" id="nom" name="nom" value="${empty nom ? '' : nom}"
+                 placeholder="Ex: Dupont"
+                 class="w-full sm:w-64 px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-red-600 transition-colors text-gray-900"/>
+        </div>
+        <button type="submit"
+                class="inline-flex items-center gap-2 px-5 py-2.5 bg-red-600 text-white font-medium rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors">
+          Filtrer
+        </button>
+      </div>
+    </form>
     </div>
 
     <!-- Tableau -->

@@ -1,41 +1,51 @@
-// java
 package com.opencare.servlets.infirmier;
 
 import com.opencare.entities.FileAttente;
 import com.opencare.repositories.FileAttenteRepository;
 import com.opencare.utils.JPAUtil;
-import jakarta.persistence.EntityManager;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.*;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.time.*;
-import java.util.Comparator;
+import java.time.LocalDate;
 import java.util.List;
 
-@WebServlet(urlPatterns = "/infirmier/patients")
+@WebServlet("/infirmier/patients")
 public class InfirmierPatientsServlet extends HttpServlet {
 
-    private final FileAttenteRepository queueRepo = new FileAttenteRepository();
+    private FileAttenteRepository repository;
+
+    @Override
+    public void init() {
+        this.repository = new FileAttenteRepository();
+    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String dateStr = req.getParameter("date");
-        LocalDate target = (dateStr == null || dateStr.isBlank()) ? LocalDate.now() : LocalDate.parse(dateStr);
+        String dateParam = req.getParameter("date");
+        String nom = req.getParameter("nom");
 
-        try (EntityManager em = JPAUtil.getEntityManager()) {
-            List<FileAttente> raw = queueRepo.findTodayWithPatient(em); // charge le jour courant
-            ZoneId zone = ZoneId.systemDefault();
-            List<FileAttente> list = raw.stream()
-                    .filter(fa -> fa.getArriveAt() != null &&
-                            fa.getArriveAt().atZone(zone).toLocalDate().isEqual(target))
-                    .sorted(Comparator.comparing(FileAttente::getArriveAt))
-                    .toList();
-
-            req.setAttribute("fileAttente", list);
-            req.setAttribute("date", target.toString());
+        LocalDate date;
+        try {
+            date = (dateParam == null || dateParam.isBlank()) ? LocalDate.now() : LocalDate.parse(dateParam);
+        } catch (Exception ex) {
+            date = LocalDate.now();
         }
-        req.getRequestDispatcher("/views/infirmier/patients.jsp").forward(req, resp);
+
+        var em = JPAUtil.getEntityManager();
+        try {
+            List<FileAttente> fileAttente = repository.searchByDateAndNom(em, date, nom);
+
+            req.setAttribute("fileAttente", fileAttente);
+            req.setAttribute("date", date.toString());
+            req.setAttribute("nom", nom == null ? "" : nom);
+
+            req.getRequestDispatcher("/views/infirmier/patients.jsp").forward(req, resp);
+        } finally {
+            em.close();
+        }
     }
 }

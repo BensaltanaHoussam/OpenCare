@@ -1,4 +1,3 @@
-// java
 package com.opencare.repositories;
 
 import com.opencare.entities.FileAttente;
@@ -31,13 +30,6 @@ public class FileAttenteRepository {
         return count != null && count > 0;
     }
 
-    public void enqueue(EntityManager em, Patient patient) {
-        FileAttente fa = new FileAttente();
-        fa.setPatient(patient);
-        fa.setStatut(FileAttente.Statut.EN_ATTENTE);
-        em.persist(fa);
-    }
-
     public void enqueue(EntityManager em, Patient patient, SignesVitaux signes) {
         FileAttente fa = new FileAttente();
         fa.setPatient(patient);
@@ -62,18 +54,31 @@ public class FileAttenteRepository {
                 .getResultList();
     }
 
-    public List<FileAttente> findTodayWithPatient(EntityManager em) {
-        Instant start = LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant();
-        Instant end = LocalDate.now().plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant();
+    public List<FileAttente> searchByDateAndNom(EntityManager em, LocalDate date, String nom) {
+        LocalDate effectiveDate = (date == null) ? LocalDate.now() : date;
+        Instant start = effectiveDate.atStartOfDay(ZoneId.systemDefault()).toInstant();
+        Instant end = effectiveDate.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant();
 
-        return em.createQuery(
-                        "select fa from FileAttente fa " +
-                                "join fetch fa.patient p " +
-                                "where fa.arriveAt >= :start and fa.arriveAt < :end " +
-                                "order by fa.arriveAt asc",
-                        FileAttente.class)
+        StringBuilder jpql = new StringBuilder(
+                "select fa from FileAttente fa " +
+                        "join fetch fa.patient p " +
+                        "left join fetch fa.signesVitaux sv " +
+                        "where fa.arriveAt >= :start and fa.arriveAt < :end"
+        );
+
+        boolean hasNom = nom != null && !nom.isBlank();
+        if (hasNom) {
+            jpql.append(" and lower(p.nom) like :nom");
+        }
+        jpql.append(" order by fa.arriveAt asc");
+
+        var q = em.createQuery(jpql.toString(), FileAttente.class)
                 .setParameter("start", start)
-                .setParameter("end", end)
-                .getResultList();
+                .setParameter("end", end);
+
+        if (hasNom) {
+            q.setParameter("nom", "%" + nom.toLowerCase().trim() + "%");
+        }
+        return q.getResultList();
     }
 }
